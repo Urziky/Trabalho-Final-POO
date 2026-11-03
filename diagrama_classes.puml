@@ -1,0 +1,69 @@
+@startuml diagrama_classes
+' Sistema de Gestão de Adoções para ONGs de Proteção Animal
+' Sprint 1 - Diagrama de classes inicial (apenas classes e relações)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam nodesep 45
+skinparam ranksep 60
+skinparam defaultFontSize 13
+skinparam defaultFontName "DejaVu Sans"
+skinparam class {
+  BackgroundColor #FDFDFD
+  BorderColor #2F3B45
+  ArrowColor #2F3B45
+}
+hide empty members
+hide circle
+
+abstract class Pessoa <<abstract>>
+abstract class Animal <<abstract>>
+abstract class EtapaProcesso <<abstract>>
+
+class ONG
+class FiltroAnimal
+class Adotante
+class Voluntario
+class Moradia
+class Cao
+class Gato
+class ProcessoAdocao
+class RegistroEtapa
+class Triagem
+class Entrevista
+class Visita
+class Aprovado
+class Recusado
+
+' ---------- Herança ("é um") ----------
+Pessoa <|-- Adotante
+Pessoa <|-- Voluntario
+Animal <|-- Cao
+Animal <|-- Gato
+EtapaProcesso <|-- Triagem
+EtapaProcesso <|-- Entrevista
+EtapaProcesso <|-- Visita
+EtapaProcesso <|-- Aprovado
+EtapaProcesso <|-- Recusado
+
+' ---------- Agregação ----------
+ONG "1" o-- "0..*" Animal : abriga >
+ONG "1" o-- "0..*" Adotante : cadastra >
+ONG "1" o-- "1..*" Voluntario : conta com >
+
+' ---------- Composição ----------
+ONG "1" *-- "0..*" ProcessoAdocao : conduz >
+ProcessoAdocao "1" *-- "1..*" RegistroEtapa : histórico >
+RegistroEtapa -[hidden]> EtapaProcesso
+Adotante "1" *-- "1" Moradia : possui >
+
+' ---------- Associação ----------
+ProcessoAdocao "0..*" --> "1" Adotante : interessado
+ProcessoAdocao "0..*" --> "1" Animal : animal
+ProcessoAdocao "0..*" ---> "1" EtapaProcesso : etapa atual
+RegistroEtapa "0..*" --> "1" Voluntario : responsável
+
+' ---------- Dependência ----------
+ONG ..> FiltroAnimal : usa na busca >
+
+@enduml
