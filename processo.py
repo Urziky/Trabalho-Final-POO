@@ -1,4 +1,7 @@
-from etapaProcesso import Triagem
+from datetime import date
+
+from etapaProcesso import Triagem, Recusado
+
 
 class RegistroEtapa:
     def __init__(self, nome_etapa, voluntario, data):
@@ -8,22 +11,63 @@ class RegistroEtapa:
 
     def mostrar_registro(self):
         return (f"Data: {self._data} | Etapa: {self._nome_etapa} | "
-                f"Responsavel: {self._voluntario._nome}")
+                f"Responsavel: {self._voluntario.nome}")
+
 
 class ProcessoAdocao:
-    def __init__(self, codigo, adotante, animal, voluntario):
+    def __init__(self, codigo, adotante, animal, voluntario, data=None):
         self._codigo = codigo
         self._adotante = adotante
         self._animal = animal
-        self._etapa_atual = Triagem()#Triagem é a primeira etapa, mas pode ser alterada se preferirem
+        self._etapa_atual = Triagem()  # todo processo comeca na triagem
         self._historico = []
 
-        #Ja deixa indisponivel quando o processo comeca
-        self._animal._disponivel = False
+        # se nao passar a data, usa a de hoje
+        if data is None:
+            data = date.today().strftime("%d/%m/%Y")
+
+        # o animal fica reservado enquanto o processo estiver aberto
+        self._animal.reservar()
+
+        # ja registra a triagem com o voluntario que abriu o processo
+        self._registrar(voluntario, data)
+
+    @property
+    def codigo(self):
+        return self._codigo
+
+    @property
+    def adotante(self):
+        return self._adotante
+
+    @property
+    def animal(self):
+        return self._animal
+
+    @property
+    def etapa_atual(self):
+        return self._etapa_atual
+
+    @property
+    def historico(self):
+        return self._historico.copy()
 
     def avancar_etapa(self, voluntario, data):
-        nova_etapa = self._etapa_atual.proxima_etapa()
+        # se a etapa atual for Aprovado ou Recusado, proxima_etapa() da erro
+        self._etapa_atual = self._etapa_atual.proxima_etapa()
+        self._registrar(voluntario, data)
+        # quando chega em Aprovado o animal continua indisponivel (foi adotado)
 
-        self._etapa_atual = nova_etapa
+    def recusar(self, voluntario, data):
+        if self._etapa_atual.finalizada():
+            raise ValueError("Esse processo ja foi finalizado.")
 
-        novo_registro = RegistroEtapa(self._etapa_atual._nome_etapa, voluntario, data)
+        self._etapa_atual = Recusado()
+        self._registrar(voluntario, data)
+
+        # recusou, entao o animal volta a poder ser adotado
+        self._animal.liberar()
+
+    def _registrar(self, voluntario, data):
+        registro = RegistroEtapa(self._etapa_atual.nome_etapa, voluntario, data)
+        self._historico.append(registro)
