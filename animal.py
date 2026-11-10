@@ -5,7 +5,7 @@ from abc import ABC
 class Animal(ABC):
     def __init__(self, codigo, nome, idade, porte,
                  vacinado, castrado):
-        self._codigo = codigo
+        self.__codigo = codigo
         self.nome = nome
         self.idade = idade
         self.porte = porte
