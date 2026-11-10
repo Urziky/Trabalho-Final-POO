@@ -6,11 +6,11 @@ class Animal(ABC):
     def __init__(self, codigo, nome, idade, porte,
                  vacinado, castrado):
         self._codigo = codigo
-        self._nome = nome
-        self._idade = idade
-        self._porte = porte
-        self._vacinado = vacinado
-        self._castrado = castrado
+        self.nome = nome
+        self.idade = idade
+        self.porte = porte
+        self.vacinado = vacinado
+        self.castrado = castrado
         self._disponivel = True
 
     #codigo não possui setter para impedir que o valor seja alterado depois de criado
