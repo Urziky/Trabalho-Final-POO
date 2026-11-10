@@ -10,8 +10,9 @@ Sistema desenvolvido em Python para auxiliar ONGs de proteção animal no gerenc
 
 Requisito: Python 3 instalado.
 
+```
 python main.py
-
+```
 
 ## 3. Funcionalidades
 - Cadastro de cachorros e gatos.
