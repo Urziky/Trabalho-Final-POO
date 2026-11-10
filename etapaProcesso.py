@@ -6,7 +6,7 @@ class Etapa:
     def nome_etapa(self):
         return self._nome_etapa
 
-    #m
+    #verifica se foi finalizada ou não a etapa
     def finalizada(self):
         return False
 
