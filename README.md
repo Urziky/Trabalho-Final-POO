@@ -1,4 +1,4 @@
-# Sistema de Gestão de Adoções
+# Sistema de Gestão de Adoções para ONGs de Proteção Animal
 
 # Trabalho Final – Programação Orientada a Objetos
 
