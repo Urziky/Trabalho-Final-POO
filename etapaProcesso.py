@@ -1,14 +1,20 @@
-class Etapa:
+from abc import ABC, abstractmethod
+
+class Etapa(ABC):
     def __init__(self, nome_etapa):
-        self._nome_etapa = nome_etapa
+        self.__nome_etapa = nome_etapa
 
     @property
     def nome_etapa(self):
-        return self._nome_etapa
+        return self.__nome_etapa
 
     #verifica se foi finalizada ou não a etapa
     def finalizada(self):
         return False
+
+    @abstractmethod
+    def proxima_etapa(self):
+        pass
 
 class Triagem(Etapa):
     def __init__(self):
@@ -31,8 +37,6 @@ class Visita(Etapa):
     def proxima_etapa(self):
         return Aprovado()
 
-#tenho que fazer a logica de aprovado e recusado ainda, mas defini as proximas etapas so pra saberem qual vai depois de qual
-#(Ou mudarem se quiserem)
 class Aprovado(Etapa):
     def __init__(self):
         super().__init__("Aprovado")

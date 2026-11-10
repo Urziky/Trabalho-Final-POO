@@ -2,34 +2,34 @@
 class Pessoa:
     def __init__(self, nome, cpf, telefone):
         self.nome = nome
-        self._cpf = cpf
+        self.__cpf = cpf
         self.telefone = telefone
 
     #getters e setters
     @property
     def nome(self):
-        return self._nome
+        return self.__nome
 
     @nome.setter
     def nome(self, valor):
         if not isinstance(valor, str) or not valor.strip():
             raise ValueError("Nome inválido.")
-        self._nome = valor.strip()
+        self.__nome = valor.strip()
 
     #cpf não possui setter porque ele serve como identificador da pessoa
     @property
     def cpf(self):
-        return self._cpf
+        return self.__cpf
 
     @property
     def telefone(self):
-        return self._telefone
+        return self.__telefone
 
     @telefone.setter
     def telefone(self, valor):
         if not isinstance(valor, str) or not valor.strip():
             raise ValueError("Telefone inválido.")
-        self._telefone = valor.strip()
+        self.__telefone = valor.strip()
 
 
 class Adotante(Pessoa):
@@ -41,23 +41,23 @@ class Adotante(Pessoa):
     #getters e setters
     @property
     def renda(self):
-        return self._renda
+        return self.__renda
 
     @renda.setter
     def renda(self, valor):
         if not isinstance(valor, (int, float)) or isinstance(valor, bool) or valor < 0:
             raise ValueError("Renda inválida.")
-        self._renda = valor
+        self.__renda = valor
 
     @property
     def moradia(self):
-        return self._moradia
+        return self.__moradia
 
     @moradia.setter
     def moradia(self, valor):
         if valor not in ("casa", "apartamento"):
             raise ValueError("Moradia inválida, deve ser casa ou apartamento.")
-        self._moradia = valor
+        self.__moradia = valor
 
 
 class Voluntario(Pessoa):

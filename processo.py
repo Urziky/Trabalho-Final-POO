@@ -5,71 +5,71 @@ from etapaProcesso import Triagem, Recusado, Aprovado
 
 class RegistroEtapa:
     def __init__(self, nome_etapa, voluntario, data):
-        self._nome_etapa = nome_etapa
-        self._voluntario = voluntario
-        self._data = data
+        self.__nome_etapa = nome_etapa
+        self.__voluntario = voluntario
+        self.__data = data
 
     #getters
     @property
     def nome_etapa(self):
-        return self._nome_etapa
+        return self.__nome_etapa
 
     @property
     def voluntario(self):
-        return self._voluntario
+        return self.__voluntario
 
     @property
     def data(self):
-        return self._data
+        return self.__data
 
     def mostrar_registro(self):
-        return (f"Data: {self._data} | Etapa: {self._nome_etapa} | "
-                f"Responsavel: {self._voluntario.nome}")
+        return (f"Data: {self.__data} | Etapa: {self.__nome_etapa} | "
+                f"Responsavel: {self.__voluntario.nome}")
 
 
 class ProcessoAdocao:
     def __init__(self, codigo, adotante, animal, voluntario, data=None):
-        self._codigo = codigo
-        self._adotante = adotante
-        self._animal = animal
-        self._etapa_atual = Triagem()  # todo processo comeca na triagem
-        self._historico = []
+        self.__codigo = codigo
+        self.__adotante = adotante
+        self.__animal = animal
+        self.__etapa_atual = Triagem()  # todo processo comeca na triagem
+        self.__historico = []
 
         # se nao passar a data, usa a de hoje
         if data is None:
             data = date.today().strftime("%d/%m/%Y")
 
         # o animal fica reservado enquanto o processo estiver aberto
-        self._animal.reservar()
+        self.__animal.reservar()
 
         # ja registra a triagem com o voluntario que abriu o processo
-        self._registrar(voluntario, data)
+        self.__registrar(voluntario, data)
 
     @property
     def codigo(self):
-        return self._codigo
+        return self.__codigo
 
     @property
     def adotante(self):
-        return self._adotante
+        return self.__adotante
 
     @property
     def animal(self):
-        return self._animal
+        return self.__animal
 
     @property
     def etapa_atual(self):
-        return self._etapa_atual
+        return self.__etapa_atual
 
     @property
     def historico(self):
-        return self._historico.copy()
+        return self.__historico.copy()
 
     #caso a data nao seja passada, sera definida como a data de hoje
     def avancar_etapa(self, voluntario, data=None):
 
         #verificação caso a etapa ja tenha sido finalizada.
-        if self._etapa_atual.finalizada():
+        if self.__etapa_atual.finalizada():
             raise ValueError("Esse processo ja foi finalizado.")
 
         #define a data do registro da nova etapa, caso nao seja passada a data, define como a data de hoje.
@@ -78,27 +78,27 @@ class ProcessoAdocao:
 
         
         # se a etapa atual for Aprovado ou Recusado, proxima_etapa() da erro
-        self._etapa_atual = self._etapa_atual.proxima_etapa()
+        self.__etapa_atual = self.__etapa_atual.proxima_etapa()
 
-        self._registrar(voluntario, data)
+        self.__registrar(voluntario, data)
         # quando chega em Aprovado o animal continua indisponivel (foi adotado)
     
     #o valor de dta padrão foi definido como none para que caso a data não seja informada ela seja definida como a data de hoje.
     def recusar(self, voluntario, data=None):
-        if self._etapa_atual.finalizada():
+        if self.__etapa_atual.finalizada():
             raise ValueError("Esse processo ja foi finalizado.")
 
         if data is None:
             data = date.today().strftime("%d/%m/%Y")
 
-        self._etapa_atual = Recusado()
-        self._registrar(voluntario, data)
+        self.__etapa_atual = Recusado()
+        self.__registrar(voluntario, data)
 
         # recusou, entao o animal volta a poder ser adotado
-        self._animal.liberar()
+        self.__animal.liberar()
 
-    def _registrar(self, voluntario, data):
+    def __registrar(self, voluntario, data):
 
-        registro = RegistroEtapa(self._etapa_atual.nome_etapa, voluntario, data)
-        self._historico.append(registro)
+        registro = RegistroEtapa(self.__etapa_atual.nome_etapa, voluntario, data)
+        self.__historico.append(registro)
 

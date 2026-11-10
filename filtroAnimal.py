@@ -34,27 +34,27 @@ class FiltroAnimal:
         if castrado is not None and not isinstance(castrado, bool):
             raise TypeError("Castrado deve ser booleano(true ou false).")
 
-        self._especie = especie
-        self._porte = porte
-        self._vacinado = vacinado
-        self._castrado = castrado
+        self.__especie = especie
+        self.__porte = porte
+        self.__vacinado = vacinado
+        self.__castrado = castrado
 
     #getters
     @property
     def especie(self):
-        return self._especie
+        return self.__especie
 
     @property
     def porte(self):
-        return self._porte
+        return self.__porte
 
     @property
     def vacinado(self):
-        return self._vacinado
+        return self.__vacinado
 
     @property
     def castrado(self):
-        return self._castrado
+        return self.__castrado
 
     def corresponde(self, animal):
         """Retorna True quando o animal atende a todos os criterios."""
@@ -63,19 +63,19 @@ class FiltroAnimal:
         if not isinstance(animal, Animal):
             raise TypeError("E necessario informar um animal.")
         
-        if self._especie in ("cachorro", "cao"):
+        if self.__especie in ("cachorro", "cao"):
             if not isinstance(animal, Cachorro):
                 return False
             
-        elif self._especie == "gato":
+        elif self.__especie == "gato":
             if not isinstance(animal, Gato):
                 return False
 
-        if self._porte is not None and animal.porte.lower() != self._porte:
+        if self.__porte is not None and animal.porte.lower() != self.__porte:
             return False
-        if self._vacinado is not None and animal.vacinado != self._vacinado:
+        if self.__vacinado is not None and animal.vacinado != self.__vacinado:
             return False
-        if self._castrado is not None and animal.castrado != self._castrado:
+        if self.__castrado is not None and animal.castrado != self.__castrado:
             return False
 
         return True
