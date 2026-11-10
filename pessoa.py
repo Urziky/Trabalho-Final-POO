@@ -2,7 +2,7 @@
 class Pessoa:
     def __init__(self, nome, cpf, telefone):
         self.nome = nome
-        self.cpf = cpf
+        self._cpf = cpf
         self.telefone = telefone
 
     #getters e setters
