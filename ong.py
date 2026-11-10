@@ -23,7 +23,7 @@ class ONG:
         if not isinstance(animal, Animal):
             raise TypeError("E necessario informar um animal.")
         
-        if any(a._codigo == animal._codigo for a in self._animais):
+        if any(a.codigo == animal.codigo for a in self._animais):
             raise ValueError("Ja existe um animal com esse codigo.")
         
         self._animais.append(animal)
@@ -32,7 +32,7 @@ class ONG:
         if not isinstance(adotante, Adotante):
             raise TypeError("E necessario informar um adotante.")
         
-        if any(a._cpf == adotante._cpf for a in self._adotantes):
+        if any(a.cpf == adotante.cpf for a in self._adotantes):
             raise ValueError("Esse CPF ja esta cadastrado como adotante.")
         
         self._adotantes.append(adotante)
@@ -41,7 +41,7 @@ class ONG:
         if not isinstance(voluntario, Voluntario):
             raise TypeError("E necessario informar um voluntario.")
         
-        if any(v._cpf == voluntario._cpf for v in self._voluntarios):
+        if any(v.cpf == voluntario.cpf for v in self._voluntarios):
             raise ValueError("Esse CPF ja esta cadastrado como voluntario.")
         
         self._voluntarios.append(voluntario)
