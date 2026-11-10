@@ -9,6 +9,7 @@ Sistema desenvolvido em Python para auxiliar ONGs de proteção animal no gerenc
 ## 2. Como executar
 
 Requisito: Python 3 instalado.
+
 python main.py
 
 
