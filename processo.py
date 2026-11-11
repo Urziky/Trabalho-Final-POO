@@ -1,6 +1,6 @@
 from datetime import date
 
-from etapaProcesso import Triagem, Recusado, Aprovado
+from etapaProcesso import Triagem, Recusado
 
 
 class RegistroEtapa:
@@ -101,4 +101,3 @@ class ProcessoAdocao:
 
         registro = RegistroEtapa(self.__etapa_atual.nome_etapa, voluntario, data)
         self.__historico.append(registro)
-
