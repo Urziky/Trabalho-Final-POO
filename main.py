@@ -52,9 +52,6 @@ class Main:
                     print("Opcao invalida.")
             except (ValueError, TypeError) as erro:
                 print("Erro: " + str(erro))
-            except AttributeError as erro:
-                # acontece enquanto aprovado/recusado e recusar() nao estao prontos
-                print("Essa operacao ainda nao esta disponivel: " + str(erro))
 
     def mostrar_menu(self):
         print()
@@ -99,7 +96,7 @@ class Main:
 
         adotante = Adotante(nome, cpf, telefone, renda, moradia)
         self.ong.cadastrar_adotante(adotante)
-        print("Adotante " + nome + " cadastrado.")
+        print(adotante.papel() + " " + nome + " cadastrado.")
 
     def cadastrar_voluntario(self):
         nome = self.ler_texto("Nome: ")
@@ -108,7 +105,7 @@ class Main:
 
         voluntario = Voluntario(nome, cpf, telefone)
         self.ong.cadastrar_voluntario(voluntario)
-        print("Voluntario " + nome + " cadastrado.")
+        print(voluntario.papel() + " " + nome + " cadastrado.")
 
     # animais
 
@@ -141,10 +138,8 @@ class Main:
             print(self.texto_animal(animal))
 
     def texto_animal(self, animal):
-        if isinstance(animal, Cachorro):
-            especie = "Cachorro"
-        else:
-            especie = "Gato"
+        # cada animal sabe a propria especie, nao precisa de if
+        especie = animal.especie()
 
         vacinado = "sim" if animal.vacinado else "nao"
         castrado = "sim" if animal.castrado else "nao"
