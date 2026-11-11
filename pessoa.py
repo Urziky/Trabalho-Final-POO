@@ -1,5 +1,7 @@
+from abc import ABC, abstractmethod
 
-class Pessoa:
+
+class Pessoa(ABC):
     def __init__(self, nome, cpf, telefone):
         self.nome = nome
         self.__cpf = cpf
@@ -31,6 +33,11 @@ class Pessoa:
             raise ValueError("Telefone inválido.")
         self.__telefone = valor.strip()
 
+    #cada subclasse informa o papel da pessoa na ONG (polimorfismo)
+    @abstractmethod
+    def papel(self):
+        pass
+
 
 class Adotante(Pessoa):
     def __init__(self, nome, cpf, telefone, renda, moradia):
@@ -59,7 +66,13 @@ class Adotante(Pessoa):
             raise ValueError("Moradia inválida, deve ser casa ou apartamento.")
         self.__moradia = valor
 
+    def papel(self):
+        return "Adotante"
+
 
 class Voluntario(Pessoa):
     def __init__(self, nome, cpf, telefone):
         super().__init__(nome, cpf, telefone)
+
+    def papel(self):
+        return "Voluntario"
