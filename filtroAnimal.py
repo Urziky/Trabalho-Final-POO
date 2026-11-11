@@ -7,7 +7,7 @@ class FiltroAnimal:
     def __init__(self, especie=None, porte=None, vacinado=None, castrado=None):
 
         # Um criterio igual a None significa que ele nao sera aplicado.
-        especies_validas = {"cachorro", "cao", "gato"}
+        especies_validas = {"cachorro", "cao", "cão", "gato"}
 
         #verifica se os parametros passados sao validos
         if especie is not None:
@@ -63,7 +63,7 @@ class FiltroAnimal:
         if not isinstance(animal, Animal):
             raise TypeError("E necessario informar um animal.")
         
-        if self.__especie in ("cachorro", "cao"):
+        if self.__especie in ("cachorro", "cao", "cão"):
             if not isinstance(animal, Cachorro):
                 return False
             
