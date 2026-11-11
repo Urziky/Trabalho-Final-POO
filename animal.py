@@ -1,5 +1,4 @@
-
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Animal(ABC):
@@ -81,12 +80,20 @@ class Animal(ABC):
     def liberar(self):
         self.__disponivel = True
 
+    #cada subclasse informa sua especie (polimorfismo)
+    @abstractmethod
+    def especie(self):
+        pass
+
 
 class Cachorro(Animal):
     def __init__(self, codigo, nome, idade, porte,
                  vacinado, castrado):
         super().__init__(codigo, nome, idade, porte,
                          vacinado, castrado)
+
+    def especie(self):
+        return "Cachorro"
 
 
 class Gato(Animal):
@@ -95,3 +102,5 @@ class Gato(Animal):
         super().__init__(codigo, nome, idade, porte,
                          vacinado, castrado)
 
+    def especie(self):
+        return "Gato"
