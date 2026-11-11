@@ -36,7 +36,7 @@ python main.py
 ## 4. Documentação
 
 - Sprint 1: [proposta e diagrama inicial](Sprint1_Proposta_e_Modelagem.pdf)
-- Sprint 2: diagrama de classes atualizado conforme a implementação ([PNG](diagrama_classes_sprint2.png) e [código PlantUML](diagrama_classes.puml))
+- Sprint 2: diagrama de classes atualizado conforme a implementação ([PNG](diagrama_classes_sprint2.png) e [código PlantUML](diagrama_classes_sprint2.puml))
 
 Mudanças no diagrama em relação à Sprint 1:
 - `Cao` passou a se chamar `Cachorro` e `EtapaProcesso` passou a se chamar `Etapa`, para ficar igual ao código.
