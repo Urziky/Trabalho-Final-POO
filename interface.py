@@ -18,7 +18,7 @@ class interface:
         #Tela principal
         self.janela = tk.Tk()
         self.janela.title("Sistema de Adoção - " + self.ong.nome)
-        self.janela.geometry("430x500")
+        self.janela.geometry("430x540")
         
         #Cria um texto na parte de cuma da janela
         titulo = tk.Label(self.janela, text="Sistema de Adoção - " + self.ong.nome, font=("Arial", 16, "bold"))
@@ -40,7 +40,9 @@ class interface:
                   command=self.abrir_processo).pack(pady=4)
         tk.Button(self.janela, text="7 - Avançar ou recusar processo", width=38,
                   command=self.gerenciar_processo).pack(pady=4)
-        tk.Button(self.janela, text="8 - Carregar dados de exemplo", width=38,
+        tk.Button(self.janela, text="8 - Ver histórico dos processos", width=38,
+                  command=self.ver_historico).pack(pady=4)
+        tk.Button(self.janela, text="9 - Carregar dados de exemplo", width=38,
                   command=self.carregar_exemplos).pack(pady=4)
         tk.Button(self.janela, text="Sair", width=38,
                   command=self.janela.destroy).pack(pady=14)
@@ -438,6 +440,80 @@ class interface:
         botoes.pack(pady=22)
         tk.Button(botoes, text="Avançar etapa", command=avancar).pack(side="left", padx=8)
         tk.Button(botoes, text="Recusar processo", command=recusar).pack(side="left", padx=8)
+
+    #tela do historico, em cima mostra os processos e embaixo as etapas do processo selecionado
+    def ver_historico(self):
+        processos = self.ong.consultar_processos()
+
+        if not processos:
+            messagebox.showinfo("Histórico", "Nenhum processo foi aberto ainda.")
+            return
+
+        tela = tk.Toplevel(self.janela)
+        tela.title("Histórico dos processos")
+        tela.geometry("620x480")
+
+        #tabela dos processos, mesmo esquema da tabela de animais
+        tk.Label(tela, text="Processos:").pack(pady=(10, 0))
+        colunas = ("codigo", "adotante", "animal", "etapa")
+        tabela_processos = ttk.Treeview(tela, columns=colunas, show="headings", height=6)
+        titulos = {
+            "codigo": "Processo", "adotante": "Adotante",
+            "animal": "Animal", "etapa": "Etapa atual"
+        }
+        larguras = {"codigo": 80, "adotante": 180, "animal": 180, "etapa": 120}
+
+        for coluna in colunas:
+            tabela_processos.heading(coluna, text=titulos[coluna])
+            tabela_processos.column(coluna, width=larguras[coluna], anchor="center")
+
+        tabela_processos.pack(fill="x", padx=10, pady=5)
+
+        for processo in processos:
+            tabela_processos.insert("", "end", values=(
+                processo.codigo,
+                processo.adotante.nome,
+                processo.animal.nome,
+                processo.etapa_atual.nome_etapa
+            ))
+
+        #tabela do historico, ela muda conforme o processo que for clicado em cima
+        tk.Label(tela, text="Histórico do processo selecionado:").pack(pady=(10, 0))
+        colunas_historico = ("data", "etapa", "responsavel")
+        tabela_historico = ttk.Treeview(tela, columns=colunas_historico, show="headings", height=6)
+        titulos_historico = {"data": "Data", "etapa": "Etapa", "responsavel": "Responsável"}
+        larguras_historico = {"data": 120, "etapa": 150, "responsavel": 200}
+
+        for coluna in colunas_historico:
+            tabela_historico.heading(coluna, text=titulos_historico[coluna])
+            tabela_historico.column(coluna, width=larguras_historico[coluna], anchor="center")
+
+        tabela_historico.pack(fill="x", padx=10, pady=5)
+
+        def mostrar_registros(evento):
+            #limpa a tabela antes de colocar os registros do outro processo
+            for item in tabela_historico.get_children():
+                tabela_historico.delete(item)
+
+            selecionado = tabela_processos.selection()
+            if not selecionado:
+                return
+
+            #a linha da tabela esta na mesma ordem da lista de processos
+            processo = processos[tabela_processos.index(selecionado[0])]
+
+            for registro in processo.historico:
+                tabela_historico.insert("", "end", values=(
+                    registro.data,
+                    registro.nome_etapa,
+                    registro.voluntario.nome
+                ))
+
+        #toda vez que clicar em um processo chama a funcao de cima
+        tabela_processos.bind("<<TreeviewSelect>>", mostrar_registros)
+
+        #ja deixa o primeiro processo selecionado pra tabela de baixo nao abrir vazia
+        tabela_processos.selection_set(tabela_processos.get_children()[0])
 
 
     def carregar_exemplos(self):
