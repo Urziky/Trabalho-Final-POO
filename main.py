@@ -1,9 +1,9 @@
 from datetime import date
 
-from animal import Cachorro, Gato
-from pessoa import Adotante, Voluntario
-from filtroAnimal import FiltroAnimal
-from ong import ONG
+from logica.animal import Cachorro, Gato
+from logica.pessoa import Adotante, Voluntario
+from logica.filtroAnimal import FiltroAnimal
+from logica.ong import ONG
 
 
 # Toda a parte de input e print fica aqui no Main
