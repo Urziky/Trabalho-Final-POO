@@ -10,7 +10,6 @@ from logica.filtroAnimal import FiltroAnimal
 class interface:
     def __init__(self):
     
-        #Nome aleatório, podem trocar aqui depois
         self.ong = ONG("Doação do Luizão")
         
         self.proximo_codigo_processo = 1
@@ -91,9 +90,9 @@ class interface:
         def salvar():
             try:
                 especie = ent_especie.get()
-                codigo = int(ent_codigo.get())
+                codigo = self.converter_inteiro(ent_codigo.get(), "Código")
                 nome = ent_nome.get().strip()
-                idade = int(ent_idade.get())
+                idade = self.converter_inteiro(ent_idade.get(), "Idade")
                 porte = ent_porte.get()
                 
                 #juntei os ifs em um só já que coloquei o ttk.combobox
@@ -145,8 +144,7 @@ class interface:
                     campos["Nome"].get().strip(),
                     campos["CPF"].get().strip(),
                     campos["Telefone"].get().strip(),
-                    #o replace é pq o python usa pontos para representar os numeros decimais
-                    float(campos["Renda mensal"].get().replace(",", ".")),
+                    self.converter_decimal(campos["Renda mensal"].get(), "Renda mensal"),
                     moradia.get()
                 )
                 self.ong.cadastrar_adotante(adotante)
@@ -244,7 +242,23 @@ class interface:
                 messagebox.showerror("Erro", str(erro))
 
         tk.Button(tela, text="Buscar", command=buscar).pack(pady=16)
-    
+        
+    #o int() sozinho mostra o erro em ingles (invalid literal for int...),
+    #entao aqui a gente troca por uma mensagem em portugues
+    def converter_inteiro(self, texto, campo):
+        try:
+            return int(texto.strip())
+        except ValueError:
+            raise ValueError(f"{campo} deve ser um número inteiro.")
+
+    #mesma coisa do de cima, mas para numero com virgula (renda)
+    def converter_decimal(self, texto, campo):
+        try:
+            #o replace é pq o python usa pontos para representar os numeros decimais
+            return float(texto.strip().replace(",", "."))
+        except ValueError:
+            raise ValueError(f"{campo} deve ser um número, por exemplo 2500,00.")
+
     #transforma o "sim e não" em valores booleanos(true,false), e transforma o "todos" em none
     def converter_filtro_booleano(self, valor):
         if valor == "Todos":
