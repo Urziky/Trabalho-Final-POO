@@ -1,6 +1,7 @@
 from datetime import date
 
 from logica.animal import Cachorro, Gato
+from logica.criarAnimal import CriaAnimal
 from logica.pessoa import Adotante, Voluntario
 from logica.filtroAnimal import FiltroAnimal
 from logica.ong import ONG
@@ -79,10 +80,8 @@ class Main:
         vacinado = self.ler_sim_nao("Vacinado? (s/n): ")
         castrado = self.ler_sim_nao("Castrado? (s/n): ")
 
-        if especie == "cachorro":
-            animal = Cachorro(codigo, nome, idade, porte, vacinado, castrado)
-        else:
-            animal = Gato(codigo, nome, idade, porte, vacinado, castrado)
+        #mesmo ajuste da interface.py
+        animal = CriaAnimal.criar_animal(especie, codigo, nome, idade, porte, vacinado, castrado)
 
         self.ong.cadastrar_animal(animal)
         print(nome + " cadastrado.")
