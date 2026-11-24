@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 from logica.animal import Cachorro, Gato
+from logica.criarAnimal import CriaAnimal
 from logica.pessoa import Adotante, Voluntario
 from logica.ong import ONG
 from logica.filtroAnimal import FiltroAnimal
@@ -102,10 +103,12 @@ class interface:
                 vacinado = ent_vacinado.get() == "sim"
                 castrado = ent_castrado.get() == "sim"
 
-                if especie == "cachorro":
-                    animal = Cachorro(codigo, nome, idade, porte, vacinado, castrado)
-                else:
-                    animal = Gato(codigo, nome, idade, porte, vacinado, castrado)
+                #chama a função da fabrica de animais para criar o animal de acordo com a especie ao invés de ficar chamando o construtor direto, 
+                #assim se no futuro for adicionado outra especie só precisa alterar a fabrica
+                animal = CriaAnimal.criar_animal(
+                especie, codigo, nome, idade,
+                porte, vacinado, castrado
+                )
 
                 #Manda o animal pra ser cadastrado
                 self.ong.cadastrar_animal(animal)
