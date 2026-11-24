@@ -4,8 +4,8 @@ from logica.animal import Cachorro, Gato
 #caso alguma outra especie fosse adicionada, ao invés de alterar o código de varios arquivos só precisa alterar esse.
 class CriaAnimal:
 
+    #a função chama o construtor de acordo com a especie passada.x
     @staticmethod
-    #a função chama o construtor de acordo com a especie passada.
     def criar_animal(especie, codigo, nome, idade,
                      porte, vacinado, castrado):
 
