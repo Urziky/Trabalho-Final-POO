@@ -1,4 +1,5 @@
 from logica.animal import Animal
+from logica.excecoes import AnimalJaCadastradoError
 from logica.pessoa import Adotante, Voluntario
 from logica.processo import ProcessoAdocao
 from logica.filtroAnimal import FiltroAnimal
@@ -22,9 +23,10 @@ class ONG:
     def cadastrar_animal(self, animal):
         if not isinstance(animal, Animal):
             raise TypeError("E necessario informar um animal.")
-        
+
+        #agora a verificação do codigo do animal usa a verificação de exceção personalizada
         if any(a.codigo == animal.codigo for a in self.__animais):
-            raise ValueError("Ja existe um animal com esse codigo.")
+            raise AnimalJaCadastradoError("Ja existe um animal com esse codigo.")
         
         self.__animais.append(animal)
 
