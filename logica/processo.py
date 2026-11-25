@@ -1,6 +1,6 @@
 from datetime import date
 
-from logica.etapaProcesso import Triagem, Recusado
+from logica.etapaProcesso import Triagem
 
 
 class RegistroEtapa:
@@ -68,30 +68,25 @@ class ProcessoAdocao:
     #caso a data nao seja passada, sera definida como a data de hoje
     def avancar_etapa(self, voluntario, data=None):
 
-        #verificação caso a etapa ja tenha sido finalizada.
-        if self.__etapa_atual.finalizada():
-            raise ValueError("Esse processo ja foi finalizado.")
-
         #define a data do registro da nova etapa, caso nao seja passada a data, define como a data de hoje.
         if data is None:
             data = date.today().strftime("%d/%m/%Y")
 
-        
-        # se a etapa atual for Aprovado ou Recusado, proxima_etapa() da erro
+        #padrao State: quem decide a proxima etapa é a etapa atual,
+        #se ela for Aprovado ou Recusado lança ProcessoFinalizadoError
         self.__etapa_atual = self.__etapa_atual.proxima_etapa()
 
         self.__registrar(voluntario, data)
         # quando chega em Aprovado o animal continua indisponivel (foi adotado)
-    
+
     #o valor de dta padrão foi definido como none para que caso a data não seja informada ela seja definida como a data de hoje.
     def recusar(self, voluntario, data=None):
-        if self.__etapa_atual.finalizada():
-            raise ValueError("Esse processo ja foi finalizado.")
 
         if data is None:
             data = date.today().strftime("%d/%m/%Y")
 
-        self.__etapa_atual = Recusado()
+        #mesma ideia do avancar, a etapa atual decide se pode ser recusada
+        self.__etapa_atual = self.__etapa_atual.recusar()
         self.__registrar(voluntario, data)
 
         # recusou, entao o animal volta a poder ser adotado
