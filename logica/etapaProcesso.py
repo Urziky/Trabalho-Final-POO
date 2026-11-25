@@ -1,5 +1,11 @@
 from abc import ABC, abstractmethod
 
+from logica.excecoes import ProcessoFinalizadoError
+
+
+#padrao State: cada etapa é um estado do processo de adoção
+#o ProcessoAdocao guarda a etapa atual e pergunta pra ela o que fazer,
+#assim cada etapa decide se pode avançar ou ser recusada
 class Etapa(ABC):
     def __init__(self, nome_etapa):
         self.__nome_etapa = nome_etapa
@@ -12,16 +18,24 @@ class Etapa(ABC):
     def finalizada(self):
         return False
 
+    #cada etapa diz qual é a proxima
     @abstractmethod
     def proxima_etapa(self):
         pass
+
+    #por padrao qualquer etapa em andamento pode ser recusada,
+    #só Aprovado e Recusado mudam isso
+    def recusar(self):
+        return Recusado()
+
 
 class Triagem(Etapa):
     def __init__(self):
         super().__init__("Triagem")
 
     def proxima_etapa(self):
-        return Entrevista() 
+        return Entrevista()
+
 
 class Entrevista(Etapa):
     def __init__(self):
@@ -30,12 +44,14 @@ class Entrevista(Etapa):
     def proxima_etapa(self):
         return Visita()
 
+
 class Visita(Etapa):
     def __init__(self):
         super().__init__("Visita")
 
     def proxima_etapa(self):
         return Aprovado()
+
 
 class Aprovado(Etapa):
     def __init__(self):
@@ -44,9 +60,13 @@ class Aprovado(Etapa):
     def finalizada(self):
         return True
 
-    #uma forma de proteção, caso alguem tente chamar a proxima etapa de um processo aprovado, que nao existe
+    #processo aprovado nao tem proxima etapa
     def proxima_etapa(self):
-        raise ValueError("O processo ja foi aprovado.")
+        raise ProcessoFinalizadoError("O processo ja foi aprovado, nao tem proxima etapa.")
+
+    #e tambem nao pode mais ser recusado, o animal ja foi adotado
+    def recusar(self):
+        raise ProcessoFinalizadoError("O processo ja foi aprovado, nao pode ser recusado.")
 
 
 class Recusado(Etapa):
@@ -56,6 +76,10 @@ class Recusado(Etapa):
     def finalizada(self):
         return True
 
-    #gera um erro caso alguem tente chamar a proxima etapa de um processo recusado, que nao existe
+    #processo recusado nao tem proxima etapa
     def proxima_etapa(self):
-        raise ValueError("O processo foi recusado.")
+        raise ProcessoFinalizadoError("O processo foi recusado, nao tem proxima etapa.")
+
+    #nao da pra recusar duas vezes
+    def recusar(self):
+        raise ProcessoFinalizadoError("O processo ja foi recusado.")
