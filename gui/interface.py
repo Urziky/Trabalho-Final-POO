@@ -6,13 +6,15 @@ from logica.criarAnimal import CriaAnimal
 from logica.pessoa import Adotante, Voluntario
 from logica.ong import ONG
 from logica.filtroAnimal import FiltroAnimal
+from logica.observer import NotificadorAdotante
 
 
 class interface:
     def __init__(self):
     
         self.ong = ONG("Doação do Luizão")
-        
+        self.notificador = NotificadorAdotante()
+        self.ong.adicionar_observador(self.notificador)
         self.proximo_codigo_processo = 1
          
         #Tela principal
@@ -42,7 +44,9 @@ class interface:
                   command=self.gerenciar_processo).pack(pady=4)
         tk.Button(self.janela, text="8 - Ver histórico dos processos", width=38,
                   command=self.ver_historico).pack(pady=4)
-        tk.Button(self.janela, text="9 - Carregar dados de exemplo", width=38,
+        tk.Button(self.janela, text="9 - Ver notificações", width=38,
+                  command=self.ver_notificacoes).pack(pady=4)
+        tk.Button(self.janela, text="10 - Carregar dados de exemplo", width=38,
                   command=self.carregar_exemplos).pack(pady=4)
         tk.Button(self.janela, text="Sair", width=38,
                   command=self.janela.destroy).pack(pady=14)
@@ -531,6 +535,24 @@ class interface:
 
         #ja deixa o primeiro processo selecionado pra tabela de baixo nao abrir vazia
         tabela_processos.selection_set(tabela_processos.get_children()[0])
+
+    def ver_notificacoes(self):
+        notificacoes = self.notificador.notificacoes
+
+        if not notificacoes:
+            messagebox.showinfo("Notificacoes", "Nenhuma notificação gerada")
+            return
+
+        tela = tk.Toplevel(self.janela)
+        tela.title("Notificações")
+        tela.geometry("560x320")
+
+        tk.Label(tela, text="Notificacoes enviadas aos adotantes:").pack(pady=(10, 4))
+        lista = tk.Listbox(tela, width=80, height=14)
+        lista.pack(fill="both", expand=True, padx=10, pady=10)
+
+        for aviso in notificacoes:
+            lista.insert("end", aviso)
 
 
     def carregar_exemplos(self):

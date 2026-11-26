@@ -3,7 +3,7 @@ from logica.excecoes import AnimalJaCadastradoError
 from logica.pessoa import Adotante, Voluntario
 from logica.processo import ProcessoAdocao
 from logica.filtroAnimal import FiltroAnimal
-
+from logica.observer import ObservadorProcesso
 
 class ONG:
     """Centraliza cadastros, consultas e abertura de processos de adocao."""
@@ -14,10 +14,18 @@ class ONG:
         self.__adotantes = []
         self.__voluntarios = []
         self.__processos = []
+        self.__observadores = []
 
     @property
     def nome(self):
         return self.__nome
+
+    def adicionar_observador(self, observador):
+        if not isinstance(observador, ObservadorProcesso):
+            raise TypeError("O observador deve herdar de ObservadorProcesso.")
+        if observador not in self.__observadores:
+            self.__observadores.append(observador)
+
 
     
     def cadastrar_animal(self, animal):
@@ -74,7 +82,7 @@ class ONG:
         if not animal.disponivel:
             raise ValueError("O animal ja esta em processo de adocao ou foi adotado.")
 
-        processo = ProcessoAdocao(codigo, adotante, animal, voluntario)
+        processo = ProcessoAdocao(codigo, adotante, animal, voluntario, observadores=self.__observadores)
 
         self.__processos.append(processo)
 
