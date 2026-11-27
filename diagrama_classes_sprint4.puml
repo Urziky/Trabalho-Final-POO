@@ -1,0 +1,150 @@
+@startuml diagrama_classes_sprint4
+' Sistema de Adocao - diagrama de classes da Sprint 4 (pasta logica)
+
+skinparam classAttributeIconSize 0
+hide empty members
+
+abstract class Animal {
+  - codigo: int
+  - nome: str
+  - idade: int
+  - porte: str
+  - vacinado: bool
+  - castrado: bool
+  - disponivel: bool
+  + reservar()
+  + liberar()
+  + {abstract} especie(): str
+}
+
+class Cachorro {
+  + especie(): str
+}
+
+class Gato {
+  + especie(): str
+}
+
+class CriaAnimal {
+  + {static} criar_animal(especie, ...): Animal
+}
+
+abstract class Pessoa {
+  - nome: str
+  - cpf: str
+  - telefone: str
+  + {abstract} papel(): str
+}
+
+class Adotante {
+  - renda: float
+  - moradia: str
+  + papel(): str
+}
+
+class Voluntario {
+  + papel(): str
+}
+
+class ONG {
+  - nome: str
+  - animais: list
+  - adotantes: list
+  - voluntarios: list
+  - processos: list
+  - observadores: list
+  + adicionar_observador(observador)
+  + cadastrar_animal(animal)
+  + cadastrar_adotante(adotante)
+  + cadastrar_voluntario(voluntario)
+  + buscar_animais(filtro)
+  + abrir_processo(codigo, adotante, animal, voluntario)
+  + consultar_processos()
+}
+
+class FiltroAnimal {
+  - especie: str
+  - porte: str
+  - vacinado: bool
+  - castrado: bool
+  + corresponde(animal): bool
+}
+
+class ProcessoAdocao {
+  - codigo: int
+  - etapa_atual: Etapa
+  - historico: list
+  - observadores: list
+  + avancar_etapa(voluntario)
+  + recusar(voluntario)
+  + adicionar_observador(observador)
+}
+
+class RegistroEtapa {
+  - nome_etapa: str
+  - data: str
+  + mostrar_registro(): str
+}
+
+abstract class Etapa {
+  - nome_etapa: str
+  + finalizada(): bool
+  + {abstract} proxima_etapa(): Etapa
+  + recusar(): Etapa
+}
+
+class Triagem
+class Entrevista
+class Visita
+class Aprovado
+class Recusado
+
+abstract class ObservadorProcesso {
+  + {abstract} atualizar(processo, etapa)
+}
+
+class NotificadorAdotante {
+  - notificacoes: list
+  + atualizar(processo, etapa)
+}
+
+class AnimalJaCadastradoError
+class ProcessoFinalizadoError
+
+' heranca
+Animal <|-- Cachorro
+Animal <|-- Gato
+Pessoa <|-- Adotante
+Pessoa <|-- Voluntario
+Etapa <|-- Triagem
+Etapa <|-- Entrevista
+Etapa <|-- Visita
+Etapa <|-- Aprovado
+Etapa <|-- Recusado
+ObservadorProcesso <|-- NotificadorAdotante
+
+' agregacao
+ONG "1" o-- "0..*" Animal
+ONG "1" o-- "0..*" Adotante
+ONG "1" o-- "0..*" Voluntario
+ONG o-- ObservadorProcesso
+
+' composicao
+ONG "1" *-- "0..*" ProcessoAdocao
+ProcessoAdocao "1" *-- "1..*" RegistroEtapa
+
+' associacao
+ProcessoAdocao --> "1" Adotante
+ProcessoAdocao --> "1" Animal
+ProcessoAdocao --> "1" Etapa : etapa atual
+ProcessoAdocao --> ObservadorProcesso : notifica
+RegistroEtapa --> "1" Voluntario : responsavel
+
+' dependencia
+ONG ..> FiltroAnimal
+CriaAnimal ..> Cachorro
+CriaAnimal ..> Gato
+ONG ..> AnimalJaCadastradoError
+Etapa ..> ProcessoFinalizadoError
+
+@enduml
